@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            color: rgb(47, 130, 30);
+            background: rgb(220, 180, 106);
+            /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+        }
+        
+        #cityInput,
+        #cityName,
+        #inputContainer,
+        button {
+            margin: 3px;
+            padding: 2px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: rgb(73, 50, 7);
+            background-color: rgba(189, 226, 181, 0.316);
+            border-radius: 5px;
+        }
+        
+        #weatherContainer {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+            height: 300px;
+            width: 1300px;
+            border: 5px solid rgba(97, 95, 95, 0.829);
+            border-radius: 10px;
+        }
+        
+        #iconsContainer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+            height: 240px;
+            width: 1200px;
+            /* border: 5px solid rgb(31, 82, 82); */
+            border-radius: 10px;
+        }
+        
+        .icons {
+            display: inline-bock;
+            float: left;
+            height: 200px;
+            width: 190px;
+            margin: 20px;
+            /* border: 5px solid rgb(48, 47, 47); */
+            border-radius: 10px;
+        }
+        
+        .image {
+            height: 140px;
+            width: 100%;
+        }
+        
+        .imgClass {
+            height: 140px;
+            width: 100%;
+        }
+        
+        .weather {
+            margin: 5px;
+            /*  background-color: rgb(106, 215, 255); */
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .minValues {
+            text-align: center;
+            display: inline-block;
+            border-radius: 5px;
+            height: 25px;
+            width: 85px;
+            margin: 0;
+            margin-bottom: 5px;
+            margin-left: 5px;
+        }
+        
+        .maxValues {
+            text-align: center;
+            display: inline-block;
+            border-radius: 5px;
+            height: 25px;
+            width: 85px;
+            margin: 0;
+            margin-bottom: 5px;
+            margin-left: 5px;
+        }
+        
+        .mapouter {
+            position: relative;
+            text-align: right;
+            height: 500px;
+            width: 600px;
+        }
+        
+        .gmap_canvas {
+            overflow: hidden;
+            /* background: none!important; */
+            height: 350px;
+            width: 300px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <center>
+        <h1 id="Para1">Weekly Weather Report</h1>
+        <input type="text" id="cityInput" placeholder="Enter your City" name="city">
+        <button onclick="getweather()">Get Current Weather</button>
+        <button onclick="GetInfo()" onclick="getweather()">Get weekly Weather</button>
+        <h2 id="cityName"></h2>
+        <div id="container">
+
+        </div>
+
+    </center>
+
+
+    <div id="weatherContainer">
+        <div id="iconsContainer">
+            <div class="icons">
+                <p class="weather" id="day1"></p>
+                <div class="image"><img src="dots.png" class="imgClass" id="img1" alt="icon"></div>
+                <p class="minValues" id="day1Min">Loading...</p>
+                <p class="maxValues" id="day1Max">Loading...</p>
+            </div>
+            <div class="icons">
+                <p class="weather" id="day2"></p>
+                <div class="image"><img src="dots.png" class="imgClass" id="img2" alt="icon"></div>
+                <p class="minValues" id="day2Min">Loading...</p>
+                <p class="maxValues" id="day2Max">Loading...</p>
+            </div>
+            <div class="icons">
+                <p class="weather" id="day3"></p>
+                <div class="image"><img src="dots.png" class="imgClass" id="img3" alt="icon"></div>
+                <p class="minValues" id="day3Min">Loading...</p>
+                <p class="maxValues" id="day3Max">Loading...</p>
+            </div>
+            <div class="icons">
+                <p class="weather" id="day4"></p>
+                <div class="image"><img src="dots.png" class="imgClass" id="img4" alt="icon"></div>
+                <p class="minValues" id="day4Min">Loading...</p>
+                <p class="maxValues" id="day4Max">Loading...</p>
+            </div>
+            <div class="icons">
+                <p class="weather" id="day5"></p>
+                <div class="image"><img src="dots.png" class="imgClass" id="img5" alt="icon"></div>
+                <p class="minValues" id="day5Min">Loading...</p>
+                <p class="maxValues" id="day5Max">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+
+</html>
+
+<script>
+    let container = document.getElementById("container");
+    //    apikey - c6ffb6e2c6d7d594b62bedf0fa1ac0dd
+    // embededgooglemap.net 
+
+
+    async function getweather() {
+        try {
+            let city = document.getElementById("cityInput").value;
+            let result = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=c6ffb6e2c6d7d594b62bedf0fa1ac0dd&units=metric`)
+            let data = await result.json();
+            console.log(data);
+            appendData(data)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    function appendData(data) {
+        container.innerHTML = null;
+        let icon = document.createElement("img");
+        // icon.src = ;
+
+        let name = document.createElement('h3');
+        name.innerText = "City: " + data.name;
+        let temp = document.createElement('h2');
+        temp.innerText = `Tempreture:   ${data.main.temp} C`;
+        let pressure = document.createElement('h4');
+        pressure.innerText = "Pressure: " + data.main.pressure;
+        let humidity = document.createElement('h4');
+        humidity.innerText = `Humity:  ${data.main.humidity}C`;
+        let temp_max = document.createElement('h4');
+        temp_max.innerText = "Max Temp: " + data.main.temp_max;
+        let temp_min = document.createElement('h4');
+        temp_min.innerText = "Max Temp: " + data.main.temp_min;
+
+
+        let iframe = document.createElement('iframe');
+        iframe.src = `https://maps.google.com/maps?q=${data.name}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+        iframe.height = `300px`;
+        iframe.width = `300px`;
+        let div = document.createElement("div");
+        div.setAttribute("class", 'box');
+        let div1 = document.createElement("div");
+        div1.setAttribute("class", 'box');
+
+
+        div.append(name, temp, pressure, humidity, temp_max, temp_min);
+        div1.append(iframe);
+        container.append(div, div1);
+        container.style.display = "flex";
+        container.style.margin = "2% 25%";
+    }
+
+
+
+    function GetInfo() {
+        weatherContainer = document.getElementById("weatherContainer");
+        // weatherContainer.innerHTML = null;
+        var newName = document.getElementById("cityInput");
+        var cityName = document.getElementById("cityName");
+        cityName.innerHTML = "--" + newName.value + "--";
+
+        fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + newName.value + '&appid=c6ffb6e2c6d7d594b62bedf0fa1ac0dd')
+            .then(response => response.json())
+            .then(data => {
+
+                //Getting the min and max values for each day
+                for (i = 0; i < 5; i++) {
+                    document.getElementById("day" + (i + 1) + "Min").innerHTML = "Min: " + Number(data.list[i].main.temp_min - 273.15).toFixed(1) + "°";
+                    //Number(1.3450001).toFixed(2); // 1.35
+                }
+
+                for (i = 0; i < 5; i++) {
+                    document.getElementById("day" + (i + 1) + "Max").innerHTML = "Max: " + Number(data.list[i].main.temp_max - 273.15).toFixed(2) + "°";
+                }
+                //------------------------------------------------------------
+
+                //Getting Weather Icons
+                for (i = 0; i < 5; i++) {
+                    document.getElementById("img" + (i + 1)).src = "http://openweathermap.org/img/wn/" +
+                        data.list[i].weather[0].icon +
+                        ".png";
+                }
+                //------------------------------------------------------------
+                console.log(data)
+
+
+            })
+
+        .catch(err => alert("Please provide valid location!"))
+    }
+
+    function DefaultScreen() {
+        document.getElementById("cityInput").defaultValue = "London";
+        GetInfo();
+    }
+
+
+    //Getting and displaying the text for the upcoming five days of the week
+    var d = new Date();
+    var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", ];
+
+    //Function to get the correct integer for the index of the days array
+    function CheckDay(day) {
+        if (day + d.getDay() > 6) {
+            return day + d.getDay() - 7;
+        } else {
+            return day + d.getDay();
+        }
+    }
+
+    for (i = 0; i < 5; i++) {
+        document.getElementById("day" + (i + 1)).innerHTML = weekday[CheckDay(i)];
+    }
+    //------------------------------------------------------------
+</script>
